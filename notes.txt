@@ -5,3 +5,6 @@
 ### lesson 17 - Reading List project, initial setup (cont'd)
 - created BookList
 - created BookDetails
+
+### lesson 18 - Reading List project, initial setup (cont'd)
+- created BookForm
