@@ -2,3 +2,6 @@
 - created BookContext
 - created Navbar
 
+### lesson 17 - Reading List project, initial setup (cont'd)
+- created BookList
+- created BookDetails
