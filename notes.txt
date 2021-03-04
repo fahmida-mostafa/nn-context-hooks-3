@@ -8,3 +8,86 @@
 
 ### lesson 18 - Reading List project, initial setup (cont'd)
 - created BookForm
+
+### lesson 20 - add bookReducer
+
+    const BookContextProvider = (props) => {
+        const [books, setBooks] = useState([]);
+        const addBook = (title, author) => {
+            setBooks([...books, { title, author, id: uuid() }]);
+        }
+        const removeBook = (id) => {
+            setBooks(books.filter(book => book.id !== id));
+        }
+        return (
+            <BookContext.Provider value={{ books, addBook, removeBook }}>
+                {props.children}
+            </BookContext.Provider>
+        );
+    }
+
+    const BookForm = () => {
+        const { addBook } = useContext(BookContext);
+        const handleSubmit = (e) => {
+            e.preventDefault();
+            addBook(title, author);
+            ...
+        }
+        ...
+    }
+
+    const BookDetails = ({ book }) => {
+        const { removeBook } = useContext(BookContext);
+        return (
+            <li onClick={() => removeBook(book.id)}>
+                ...
+            </li>
+        );
+    }
+    
+    ---BOOKCONTEXT WITH USESTATE
+    VS
+    BOOKCONTEXT WITH USEREDUCER---
+
+    const bookReducer = (state, action) => {
+        switch(action.type) {
+            case 'ADD_BOOK':
+                return [...state, {
+                    title: action.book.title,
+                    author: action.book.author,
+                    id: uuid()
+                }];
+            case 'REMOVE_BOOK':
+                return state.filter(book => book.id !== action.id);
+            default:
+                return state;
+        }
+    }
+
+    const BookContextProvider = (props) => {
+        const [books, dispatch] = useReducer(bookReducer, []);
+        return (
+            <BookContext.Provider value={{ books, dispatch }}>
+                {props.children}
+            </BookContext.Provider>
+        );
+    }
+
+    const BookForm = () => {
+        const { dispatch } = useContext(BookContext);
+        const handleSubmit = (e) => {
+            e.preventDefault();
+            dispatch({type: 'ADD_BOOK', book: {title, author}});
+            ...
+        }
+        ...
+    }
+
+    const BookDetails = ({ book }) => {
+        const { dispatch } = useContext(BookContext);
+        return (
+            <li onClick={() => dispatch({type: 'REMOVE_BOOK', id: book.id})}>
+                ...
+            </li>
+        );
+    }
